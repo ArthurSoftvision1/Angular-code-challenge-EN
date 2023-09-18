@@ -1,0 +1,17 @@
+<div class="flex">
+    <app-search-vehicle-form
+    (vehicleTypeSelected)="onVehicleTypeSelected($event)"
+    class="w-1/2"
+  ></app-search-vehicle-form>
+  <!-- Use the app-image component to display the image -->
+  <app-image
+    [imageUrl]="
+      selectedVehicleType === 'Auto'
+        ? './assets/auto.jpg'
+        : selectedVehicleType === 'Motor'
+        ? './assets/motor.jpg'
+        : './assets/scooter.jpg'
+    "
+    class="w-1/2"
+  ></app-image>
+</div>

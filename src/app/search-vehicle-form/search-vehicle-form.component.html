@@ -1,0 +1,180 @@
+<div class="grid md:grid-cols-2">
+  <form [formGroup]="form" class="p-8 col-span-2" (ngSubmit)="onSubmit()">
+    <h2 class="text-xl font-bold text-blue-500">Voertuiginformatie opzoeken</h2>
+
+    <!-- SELECT VEHICLE TYPE-->
+    <label class="block mt-4">
+      <span class="text-gray-700"
+        >Van welk type voertuig wilt u voertuiginformatie opzoeken?</span
+      >
+      <select
+        formControlName="vehicleType"
+        class="block w-full mt-1 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+        (change)="onVehicleChange($event, (type = 'vehicleType'))"
+      >
+        <option value="{{ vehicleTypes.Auto }}">{{ vehicleTypes.Auto }}</option>
+        <option value="{{ vehicleTypes.Motor }}">
+          {{ vehicleTypes.Motor }}
+        </option>
+        <option value="{{ vehicleTypes.Scooter }}">
+          {{ vehicleTypes.Scooter }}
+        </option>
+      </select>
+    </label>
+
+    <!-- SELECT VEHICLE SUBTYPE-->
+    <label class="block mt-4">
+      <span class="text-gray-700">Welk type [auto/motor/brommer] hebt u?</span>
+      <ng-container>
+        <select
+          formControlName="vehicleSubtype"
+          (change)="onVehicleChange($event, (type = 'vehicleSubtype'))"
+          class="block w-full mt-1 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+        >
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.Hatchback"
+          >
+            {{ autoSubtypes.Hatchback }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.Sedan"
+          >
+            {{ autoSubtypes.Sedan }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.Station"
+          >
+            {{ autoSubtypes.Station }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.Cabriolet"
+          >
+            {{ autoSubtypes.Cabriolet }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.Coupe"
+          >
+            {{ autoSubtypes.Coupe }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.MVP"
+          >
+            {{ autoSubtypes.MVP }}/option>
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Auto"
+            [value]="autoSubtypes.Terreinauto"
+          >
+            {{ autoSubtypes.Terreinauto }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.AllRoad"
+          >
+            {{ motorSubtypes.AllRoad }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.Naked"
+          >
+            {{ motorSubtypes.Naked }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.Enduro"
+          >
+            {{ motorSubtypes.Enduro }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.Race"
+          >
+            {{ motorSubtypes.Race }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.Toermotor"
+          >
+            {{ motorSubtypes.Toermotor }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.Chopper"
+          >
+            {{ motorSubtypes.Chopper }}
+          </option>
+          <option
+            *ngIf="form.get('vehicleType')?.value === vehicleTypes.Motor"
+            [value]="motorSubtypes.Zijspan"
+          >
+            {{ motorSubtypes.Zijspan }}
+          </option>
+
+          <!-- Placeholder option for 'Scooter' -->
+          <option
+            *ngIf="form.controls.vehicleType.value === vehicleTypes.Scooter"
+            [ngValue]="null"
+            disabled
+          >
+            No Vehicle Subtype available for Scooter
+          </option>
+        </select>
+      </ng-container>
+    </label>
+
+    <!-- INPUT LICENSE PLATE -->
+    <label class="block mt-4">
+      <span class="text-gray-700"
+        >Vul het kenteken van uw [auto/motor/brommer] in.</span
+      >
+      <input
+        formControlName="licensePlate"
+        type="text"
+        class="mt-1 block w-full rounded-md bg-yellow-400 border-red-400 focus:border-gray-500 focus:bg-yellow-300 focus:ring-0"
+        placeholder="Bijvoorbeeld AA-14-BB or 12-AA-BB"
+        appLicensePlateFormat
+        (change)="onVehicleChange($event, (type = 'licensePlate'))"
+      />
+      <div
+        *ngIf="
+          form.get('licensePlate')?.hasError('required') &&
+          (form.get('licensePlate')?.dirty || form.get('licensePlate')?.touched)
+        "
+        class="text-red-700"
+      >
+        Kenteken is verplicht.
+      </div>
+      <div
+        *ngIf="
+        form.get('licensePlate')?.hasError('invalidLicensePlateFormat') &&
+        (form.get('licensePlate')?.dirty || form.get('licensePlate')?.touched) &&
+        form.get('licensePlate')?.value !== 'AA-14-BB' &&
+        form.get('licensePlate')?.value !== '12-AA-BB'
+        "
+        class="text-red-700"
+      >
+        Oeps, het ingevoerde kenteken heeft een ongeldige indeling. Gebruik het
+        volgende formaat AA-14-BB or 12-AA-BB.
+      </div>
+    </label>
+
+    <div class="mt-4">
+      <button
+        [ngClass]="{ '': form.invalid }"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        type="submit"
+      >
+        Verzenden
+      </button>
+      <div *ngIf="form.invalid" class="text-red-700">
+        Vul alle waardes correct in.
+      </div>
+    </div>
+  </form>
+</div>
